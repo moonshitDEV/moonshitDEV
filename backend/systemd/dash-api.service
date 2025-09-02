@@ -1,0 +1,20 @@
+[Unit]
+Description=Moonshit Dashboard API (FastAPI via Gunicorn)
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/default/dash-api
+EnvironmentFile=-/etc/default/dash-reddit
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/moonshit/backend
+ExecStart=/opt/moonshit/venv/bin/gunicorn -c gunicorn_conf.py app.main:app
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

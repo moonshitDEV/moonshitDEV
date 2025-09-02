@@ -1,0 +1,51 @@
+server {
+    listen 80;
+    server_name moonshit.dev;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name moonshit.dev;
+
+    # certs handled by certbot
+    ssl_certificate /etc/letsencrypt/live/moonshit.dev/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/moonshit.dev/privkey.pem;
+
+    # Security headers
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" always;
+
+    # Static frontend built artefacts
+    root /var/www/moonshit/current;
+    index index.html;
+
+    # Rate limit zones are defined in /etc/nginx/conf.d/limit_zones.conf
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+
+        # Sensitive routes
+        location ~* ^/api/v1/auth/ {
+            limit_req zone=auth_zone burst=10 nodelay;
+        }
+        location ~* ^/api/v1/files/upload {
+            limit_req zone=upload_zone burst=5 nodelay;
+        }
+        location ~* ^/api/v1/reddit/.*/(submit|proxy) {
+            limit_req zone=reddit_zone burst=10 nodelay;
+        }
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
