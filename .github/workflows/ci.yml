@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Backend deps
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip wheel
+          pip install -r projects/dashboard/backend/requirements.txt
+      
+      - name: Backend sanity
+        run: |
+          python - << 'PY'
+          import importlib.util, sys
+          from pathlib import Path
+          base = Path('projects/dashboard/backend')
+          spec = importlib.util.spec_from_file_location('app.main', base/'app'/'main.py')
+          mod = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          assert hasattr(mod, 'app'), 'FastAPI app not found'
+          print('Backend import OK')
+          PY
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: projects/dashboard/frontend/package-lock.json
+
+      - name: Frontend install
+        working-directory: projects/dashboard/frontend
+        run: npm ci
+
+      - name: Frontend build
+        working-directory: projects/dashboard/frontend
+        run: npm run build
+
