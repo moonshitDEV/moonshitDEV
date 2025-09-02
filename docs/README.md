@@ -6,8 +6,8 @@
 - Task Brief: `projects/dashboard/docs/TASK.md`
 
 Randoms (ad‑hoc notes, session logs)
-- `random_shit/last.md`
-- `random_shit/AGENT_LAST_SESSION-IMPORTANT.MD`
+- `data_shit/last.md`
+- `data_shit/AGENT_LAST_SESSION-IMPORTANT.MD`
 
 Notes
 - Official docs live in `docs/`. Ad‑hoc notes moved to `randoms/`.

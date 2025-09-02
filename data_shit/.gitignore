@@ -1,0 +1,14 @@
+# Ignore large/binary scratch files in data_shit
+*.log
+*.tmp
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.sqlite
+*.db
+*.png
+*.jpg
+*.jpeg
+.DS_Store
+Thumbs.db

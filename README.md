@@ -48,7 +48,7 @@
 - Live site is up with minimal dashboard. Auth, Files API, and API keys are online; Reddit UI is next.
 - Repository structure:
   - `projects/` — each app lives in its own folder (see `projects/dashboard/`)
-  - `random_shit/` — ad‑hoc notes and logs not part of projects
+  - `data_shit/` — ad‑hoc notes and logs not part of projects
 - Technical docs for the dashboard project:
   - `projects/dashboard/README.md` (entry point)
   - `projects/dashboard/docs/README.md` (overview)
