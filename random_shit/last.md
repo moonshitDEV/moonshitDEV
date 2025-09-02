@@ -1,4 +1,4 @@
-On it. I merged readiness/security fixes, removed the debug endpoint, and added the hero-style login. Here’s the status
+ On it. I merged readiness/security fixes, removed the debug endpoint, and added the hero-style login. Here’s the status
 and what I still need from you for the image and GitHub PR.
 
 What I did

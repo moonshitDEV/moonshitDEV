@@ -46,9 +46,13 @@
 ## 🔄 Catch‑Up & Future
 
 - Live site is up with minimal dashboard. Auth, Files API, and API keys are online; Reddit UI is next.
-- Technical docs moved under `docs/`:
-  - Project overview: `docs/PROJECT_README.md`
-  - Status and plan: `docs/PROJECT_STATUS.md`
+- Repository structure:
+  - `projects/` — each app lives in its own folder (see `projects/dashboard/`)
+  - `random_shit/` — ad‑hoc notes and logs not part of projects
+- Technical docs for the dashboard project:
+  - `projects/dashboard/README.md` (entry point)
+  - `docs/PROJECT_README.md` (overview)
+  - `docs/PROJECT_STATUS.md` (status and plan)
 - Near‑term: improve login/error UX, wire read‑only Reddit views, tighten deploy flow, optional Redis for auth state.
 
 ## 🤝 Contribute
