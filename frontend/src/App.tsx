@@ -1,20 +1,27 @@
 import { useEffect, useState } from 'react'
 
-function Nav({ active, setActive }: { active: string, setActive: (s: string) => void }) {
-  const tabs = [
+function Nav({ active, setActive, authed, onLogout }: { active: string, setActive: (s: string) => void, authed: boolean, onLogout: () => void }) {
+  const tabs = authed ? [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'files', label: 'Files' },
     { id: 'reddit', label: 'Reddit' },
-    { id: 'login', label: 'Login' },
     { id: 'keys', label: 'Keys' },
     { id: 'api', label: 'API' },
     { id: 'privacy', label: 'Privacy' },
+  ] : [
+    { id: 'login', label: 'Login' },
+    { id: 'privacy', label: 'Privacy' },
   ]
   return (
-    <nav className="flex gap-2 p-3 border-b border-border">
-      {tabs.map(t => (
-        <button key={t.id} className={`px-3 py-1 rounded-card ${active===t.id ? 'bg-card text-text-primary' : 'text-text-secondary hover:text-text-primary'}`} onClick={() => setActive(t.id)}>{t.label}</button>
-      ))}
+    <nav className="flex items-center gap-2 p-3 border-b border-border">
+      <div className="flex gap-2">
+        {tabs.map(t => (
+          <button key={t.id} className={`px-3 py-1 rounded-card ${active===t.id ? 'bg-card text-text-primary' : 'text-text-secondary hover:text-text-primary'}`} onClick={() => setActive(t.id)}>{t.label}</button>
+        ))}
+      </div>
+      {authed && (
+        <button className="ml-auto text-sm text-text-secondary hover:text-text-primary" onClick={onLogout}>Logout</button>
+      )}
     </nav>
   )
 }
@@ -36,7 +43,7 @@ function Dashboard() {
   return <div>API health: <span className={health==='ok' ? 'text-lime' : 'text-magenta'}>{health}</span></div>
 }
 
-function Login() {
+function Login({ onLogin }: { onLogin: () => void }) {
   const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState('')
@@ -47,7 +54,7 @@ function Login() {
       <button className="bg-cyan text-black font-semibold px-3 py-2 rounded-card" onClick={async ()=>{
         const form = new URLSearchParams({ username, password })
         const r = await fetch('/api/v1/auth/login', { method: 'POST', body: form })
-        if (r.ok) setMsg('Logged in')
+        if (r.ok) { setMsg('Logged in'); onLogin(); }
         else setMsg('Failed')
       }}>Login</button>
       <div className="text-text-secondary text-sm">{msg}</div>
@@ -341,17 +348,38 @@ function ApiExplorer() {
 
 export default function App() {
   const [tab, setTab] = useState('dashboard')
+  const [authed, setAuthed] = useState<boolean>(false)
+  const [checking, setChecking] = useState<boolean>(true)
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch('/api/v1/auth/me')
+        setAuthed(r.ok)
+      } catch {}
+      setChecking(false)
+    })()
+  }, [])
   return (
     <div className="min-h-screen">
-      <Nav active={tab} setActive={setTab} />
+      <Nav active={tab} setActive={setTab} authed={authed} onLogout={async ()=>{ await fetch('/api/v1/auth/logout', { method: 'POST' }); setAuthed(false); setTab('login'); }} />
       <div className="max-w-5xl mx-auto">
-        {tab==='dashboard' && <Section title="Overview"><Dashboard /></Section>}
-        {tab==='files' && <Section title="Files"><Files /></Section>}
-        {tab==='reddit' && <Section title="Reddit"><Reddit /></Section>}
-        {tab==='login' && <Section title="Login"><Login /></Section>}
-        {tab==='keys' && <Section title="API Keys"><Keys /></Section>}
-        {tab==='api' && <Section title="API Explorer"><ApiExplorer /></Section>}
-        {tab==='privacy' && <Section title="Privacy"><Privacy /></Section>}
+        {checking && <Section title="Loading"><div>Checking session...</div></Section>}
+        {!checking && !authed && (
+          <>
+            {tab!=='privacy' && <Section title="Login"><Login onLogin={()=>{ setAuthed(true); setTab('dashboard'); }} /></Section>}
+            {tab==='privacy' && <Section title="Privacy"><Privacy /></Section>}
+          </>
+        )}
+        {!checking && authed && (
+          <>
+            {tab==='dashboard' && <Section title="Overview"><Dashboard /></Section>}
+            {tab==='files' && <Section title="Files"><Files /></Section>}
+            {tab==='reddit' && <Section title="Reddit"><Reddit /></Section>}
+            {tab==='keys' && <Section title="API Keys"><Keys /></Section>}
+            {tab==='api' && <Section title="API Explorer"><ApiExplorer /></Section>}
+            {tab==='privacy' && <Section title="Privacy"><Privacy /></Section>}
+          </>
+        )}
       </div>
     </div>
   )
