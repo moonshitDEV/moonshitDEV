@@ -12,6 +12,6 @@ Notes
 - We will migrate source under `projects/dashboard/` in a follow-up refactor. For now, this serves as a stable entry point and index.
 
 Quick links
-- Overview: `../../docs/PROJECT_README.md`
-- Status/plan: `../../docs/PROJECT_STATUS.md`
+- Overview: `docs/README.md`
+- Status/plan: `docs/STATUS.md`
 - Makefile helpers (run from repo root): `make help`

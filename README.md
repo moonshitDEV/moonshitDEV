@@ -51,8 +51,8 @@
   - `random_shit/` — ad‑hoc notes and logs not part of projects
 - Technical docs for the dashboard project:
   - `projects/dashboard/README.md` (entry point)
-  - `docs/PROJECT_README.md` (overview)
-  - `docs/PROJECT_STATUS.md` (status and plan)
+  - `projects/dashboard/docs/README.md` (overview)
+  - `projects/dashboard/docs/STATUS.md` (status and plan)
 - Near‑term: improve login/error UX, wire read‑only Reddit views, tighten deploy flow, optional Redis for auth state.
 
 ## 🤝 Contribute

@@ -1,9 +1,9 @@
 # Documentation Index
 
-- Project Overview: `docs/PROJECT_README.md`
-- Project Status and Plan: `docs/PROJECT_STATUS.md`
+- Project Overview: `projects/dashboard/docs/README.md`
+- Project Status and Plan: `projects/dashboard/docs/STATUS.md`
 - Agent Instructions: `docs/AGENTS.md`
-- Task Brief: `docs/TASK.md`
+- Task Brief: `projects/dashboard/docs/TASK.md`
 
 Randoms (ad‑hoc notes, session logs)
 - `random_shit/last.md`
