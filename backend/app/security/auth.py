@@ -135,3 +135,12 @@ def logout(response: Response, sess: Session = Depends(require_session)):
 @router.get("/me")
 def me(sess: Session = Depends(require_session)):
     return {"user": sess.user}
+
+
+# Temporary: debug settings (only from localhost)
+@router.get("/debug_env")
+def debug_env(request: Request):
+    if request.client and request.client.host not in {"127.0.0.1", "::1"}:
+        raise HTTPException(status_code=http.HTTP_404_NOT_FOUND, detail="Not Found")
+    s = get_settings()
+    return {"admin_user": s.admin_user, "has_hash": bool(s.admin_pass_hash)}
