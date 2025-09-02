@@ -1,42 +1,60 @@
-# moonshit.dev — Phase 1 Implementation (Scaffold)
+# ⛓️🌙 MOONSHITDEV 🌙⛓️
 
-Assumptions (applied by default):
-- Single-node Ubuntu host with nginx and systemd.
-- Backend binds `127.0.0.1:8000`; nginx terminates TLS and proxies `/api/`.
-- Admin login is single-user; hash provided via env var.
-- File storage lives under `/srv/dash-data/<user>/uploads` with `0700` perms.
-- OpenAPI version pinned to `3.1.0`.
+> Experimental playground for APIs, dashboards, automation scripts, and modular system services.
+> Built fast, extended faster. No bloat, just code.
 
-What’s included:
-- Backend (FastAPI + Gunicorn): `backend/` with health, auth (cookie), files service, HMAC verifier stub, rate limiter, OpenAPI 3.1.
-- Frontend (React + Tailwind): `frontend/` with theme tokens, basic shell (Dashboard/Files/Reddit/Login), SEO meta + JSON-LD.
-- Ops: nginx site (`nginx/site-moonshit.dev`), systemd unit, env template, `setup.sh`, and `backend/nginx.md`.
+```
+███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗███████╗██╗  ██╗██╗████████╗
+████╗ ████║██╔═══██╗██╔═══██╗████╗  ██║██╔════╝██║  ██║██║╚══██╔══╝
+██╔████╔██║██║   ██║██║   ██║██╔██╗ ██║███████╗███████║██║   ██║   
+██║╚██╔╝██║██║   ██║██║   ██║██║╚██╗██║╚════██║██╔══██║██║   ██║   
+██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║███████║██║  ██║██║   ██║   
+╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝   
+```
 
-Quick start (dev):
-- Makefile helpers:
-  - Setup: `make install` (creates `.venv/` and installs backend deps)
-  - API: `make dev-api` (FastAPI on `127.0.0.1:8000` with reload)
-  - Web: `make dev-ui` (Vite on `http://localhost:5173`, proxies `/api` → `127.0.0.1:8000`)
-  - Both: `make dev` (API in background, UI in foreground)
-  - Health: `make health` and OpenAPI: `make openapi`
+## 🚀 Features
 
-If you prefer explicit commands:
-- API: `python -m venv .venv && . .venv/bin/activate && pip install -r backend/requirements.txt && uvicorn app.main:app --app-dir backend --reload`
-- Web: `cd frontend && pnpm i && pnpm dev` (or `npm install && npm run dev`).
+- FastAPI + Uvicorn backend
+- Node.js scripts for scraping and automation
+- Systemd services & timers for deployment
+- File API with upload/download dashboard
+- Reddit Dashboard with mod tools and multi-user switching
+- Domain tools (Cloudflare price scrapers, TLD explorers)
+- Easy plug-and-play endpoints
 
-Deploy:
-- `sudo ./setup.sh` (idempotent; skips overwriting existing systemd/nginx by default), then edit `/etc/default/dash-api` (set `DASH_SECRET_KEY` and `DASH_ADMIN_PASS_HASH`),
-- `sudo systemctl status dash-api && curl -fsSL http://127.0.0.1:8000/health`.
+## 🛠️ Stack
 
-Ops helpers (Makefile):
-- `make prod-status` — systemd status for `dash-api`.
-- `make prod-restart` — restart API and reload nginx.
-- `make prod-logs` — tail logs.
+- Python (FastAPI, Uvicorn)
+- Node.js
+- Nginx + Let’s Encrypt
+- Linux VPS (Contabo)
+- direnv for env vars
 
-Overwrites
-- To overwrite existing service/nginx files intentionally: `sudo ./setup.sh --force` (backs up with `.bak.<ts>`), or target a subset with `--force-service` or `--force-nginx`.
+## 🌍 Links
 
-Next milestones:
-- Wire Reddit typed endpoints + proxy registry with scopes and auditing.
-- Add CSRF token for state-changing cookie flows.
-- Add backups (SQLite + uploads rotation) and audit logs.
+- Website: https://moonshit.dev
+- Subreddit: https://reddit.com/r/moonshitDEV
+- Email: gitDEV@moonshit.download
+
+## 🏷️ Badges
+
+![License](https://img.shields.io/badge/license-MIT-green)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue)
+![Issues](https://img.shields.io/github/issues/moonshitDEV/moonshitDEV)
+![Stars](https://img.shields.io/github/stars/moonshitDEV/moonshitDEV?style=social)
+
+## 🔄 Catch‑Up & Future
+
+- Live site is up with minimal dashboard. Auth, Files API, and API keys are online; Reddit UI is next.
+- Technical docs moved under `docs/`:
+  - Project overview: `docs/PROJECT_README.md`
+  - Status and plan: `docs/PROJECT_STATUS.md`
+- Near‑term: improve login/error UX, wire read‑only Reddit views, tighten deploy flow, optional Redis for auth state.
+
+## 🤝 Contribute
+
+Fork it, hack it, and PR it. This repo is meant to grow with new endpoints, dashboards, and ideas.
+
+## 📜 License
+
+MIT License — feel free to use, remix, and contribute.
