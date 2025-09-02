@@ -44,20 +44,27 @@ function Dashboard() {
 }
 
 function Login({ onLogin }: { onLogin: () => void }) {
-  const [username, setUsername] = useState('admin')
+  const [username, setUsername] = useState('shitadmin')
   const [password, setPassword] = useState('')
   const [msg, setMsg] = useState('')
   return (
-    <div className="flex flex-col gap-3 max-w-md">
-      <input className="bg-panel border border-border rounded-card px-3 py-2" placeholder="username" value={username} onChange={e=>setUsername(e.target.value)} />
-      <input className="bg-panel border border-border rounded-card px-3 py-2" placeholder="password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
-      <button className="bg-cyan text-black font-semibold px-3 py-2 rounded-card" onClick={async ()=>{
-        const form = new URLSearchParams({ username, password })
-        const r = await fetch('/api/v1/auth/login', { method: 'POST', body: form })
-        if (r.ok) { setMsg('Logged in'); onLogin(); }
-        else setMsg('Failed')
-      }}>Login</button>
-      <div className="text-text-secondary text-sm">{msg}</div>
+    <div className="min-h-[70vh] flex items-center justify-center relative overflow-hidden rounded-card">
+      <div className="absolute inset-0 bg-[url('/login-hero.png')] bg-cover bg-center opacity-90" aria-hidden="true" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-black/30 via-black/10 to-transparent" aria-hidden="true" />
+      <div className="relative z-10 w-full max-w-md mx-auto p-6 bg-card/80 backdrop-blur rounded-card border border-border shadow-soft">
+        <h3 className="text-xl font-semibold mb-4">Welcome</h3>
+        <div className="flex flex-col gap-3">
+          <input className="bg-panel border border-border rounded-card px-3 py-2" placeholder="username" value={username} onChange={e=>setUsername(e.target.value)} />
+          <input className="bg-panel border border-border rounded-card px-3 py-2" placeholder="password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
+          <button className="bg-cyan text-black font-semibold px-3 py-2 rounded-card" onClick={async ()=>{
+            const form = new URLSearchParams({ username, password })
+            const r = await fetch('/api/v1/auth/login', { method: 'POST', body: form })
+            if (r.ok) { setMsg('Logged in'); onLogin(); }
+            else setMsg('Failed')
+          }}>Login</button>
+          <div className="text-text-secondary text-sm">{msg}</div>
+        </div>
+      </div>
     </div>
   )
 }
