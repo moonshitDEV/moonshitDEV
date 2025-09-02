@@ -97,10 +97,10 @@ This document summarizes the current state, what’s working, what’s broken/mi
 
 ## References
 
-- Backend settings: `code/backend/app/settings.py`
-- Auth/session/CSRF: `code/backend/app/security/{auth,csrf}.py`
-- Files API: `code/backend/app/domains/files/router.py`
-- Reddit services: `code/backend/app/domains/reddit/{router,services}.py`
-- API keys/HMAC: `code/backend/app/domains/keys/router.py`, `code/backend/app/security/hmac.py`, `code/backend/app/db.py`
-- Nginx site: `code/nginx/site-moonshit.dev`
-- Make targets: `code/Makefile` (`prod-deploy-frontend`, `prod-deploy-all`)
+- Backend settings: `projects/dashboard/backend/app/settings.py`
+- Auth/session/CSRF: `projects/dashboard/backend/app/security/{auth,csrf}.py`
+- Files API: `projects/dashboard/backend/app/domains/files/router.py`
+- Reddit services: `projects/dashboard/backend/app/domains/reddit/{router,services}.py`
+- API keys/HMAC: `projects/dashboard/backend/app/domains/keys/router.py`, `projects/dashboard/backend/app/security/hmac.py`, `projects/dashboard/backend/app/db.py`
+- Nginx site: `projects/dashboard/nginx/site-moonshit.dev`
+- Make targets: `projects/dashboard/Makefile` (`prod-deploy-frontend`, `prod-deploy-all`)

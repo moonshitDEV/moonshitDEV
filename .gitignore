@@ -29,3 +29,4 @@ openapi.json
 *.tar.gz
 *.zip
 
+projects/dashboard/frontend/dist/
