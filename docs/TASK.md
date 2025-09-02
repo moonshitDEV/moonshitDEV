@@ -204,4 +204,3 @@ Personal dashboard with secure login, file explorer, and a Reddit control panel.
 - `curl -fsSL http://127.0.0.1:8000/health`
 
 > This document is the build contract for Phase‑1. No code here; implementation follows this map exactly.
-

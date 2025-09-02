@@ -5,7 +5,7 @@ UVICORN := $(VENV)/bin/uvicorn
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
 
-.PHONY: help venv install install-backend ui-install dev-api dev-ui dev cp-env openapi health clean prod-status prod-restart prod-logs
+.PHONY: help venv install install-backend ui-install dev-api dev-ui dev cp-env openapi health clean prod-status prod-restart prod-logs prod-build-frontend prod-deploy-frontend prod-deploy-all
 
 help:
 	@echo "Targets:"
@@ -22,6 +22,9 @@ help:
 	@echo "  prod-status    systemd status for dash-api (sudo)"
 	@echo "  prod-restart   Restart dash-api and reload nginx (sudo)"
 	@echo "  prod-logs      Tail dash-api journal (sudo)"
+	@echo "  prod-build-frontend  Build UI into frontend/dist2 (no root perms needed)"
+	@echo "  prod-deploy-frontend Deploy UI to server via rsync (requires DEPLOY_HOST)"
+	@echo "  prod-deploy-all      Deploy UI and reload services on server"
 
 venv:
 	@test -d $(VENV) || $(PY) -m venv $(VENV)
@@ -76,3 +79,16 @@ prod-restart:
 
 prod-logs:
 	@sudo journalctl -u dash-api -f -n 200
+
+# Production helpers
+prod-build-frontend:
+	@cd $(FRONTEND_DIR) && npm run build -- --outDir dist2
+
+# Usage: make prod-deploy-frontend DEPLOY_HOST=user@host [DEPLOY_PATH=/var/www/moonshit/current]
+prod-deploy-frontend: prod-build-frontend
+	@DEPLOY_PATH=$${DEPLOY_PATH:-/var/www/moonshit/current}; \
+	rsync -avz --delete frontend/dist2/ $$DEPLOY_HOST:$$DEPLOY_PATH/
+
+# Usage: make prod-deploy-all DEPLOY_HOST=user@host [DEPLOY_PATH=/var/www/moonshit/current]
+prod-deploy-all: prod-deploy-frontend
+	@ssh $$DEPLOY_HOST 'sudo nginx -t && sudo systemctl reload nginx && sudo systemctl restart dash-api'
